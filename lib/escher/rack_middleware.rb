@@ -42,5 +42,8 @@ class Escher::RackMiddleware
     YAML.dump(request_env)
   end
 
+  def self.config(&block)
+    block.call(self)
+  end
 
 end
