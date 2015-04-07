@@ -1,6 +1,6 @@
 # Escher::RackMiddleware
 
-TODO: Write a gem description
+Rack Middleware for ease of use escher authentication for your application
 
 ## Installation
 
@@ -18,7 +18,30 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+
+
+require 'escher/rack_middleware'
+Escher::RackMiddleware.config do |c|
+
+  # the default logger use the ruby core logger with STDOUT
+  c.logger= some_logger_instance
+
+  # for read more about escher auth object initialization please visit escherauth.io
+  c.add_escher_authenticator( Escher::Auth.new( CredentialScope, AuthOptions ))
+
+  # this will be triggered every time a request hit your appication
+  c.add_credential_updater{ Escher::Keypool.new.get_key_db }
+
+  # this help you exclude path(s) if you dont want require authorization for every endpoint
+  c.add_exclude_path(/^\/*monitoring\//)
+
+end
+
+use Escher::RackMiddleware
+run YourAwesomeApplication
+
+```
 
 ## Contributing
 
