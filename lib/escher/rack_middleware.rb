@@ -18,8 +18,6 @@ class Escher::RackMiddleware
 
   def call(request_env)
 
-    logger.debug(env_dump_string(request_env))
-
     unless excluded_path?(request_env['REQUEST_URI'])
       return unauthorized_response unless authorized?(request_env)
     end
