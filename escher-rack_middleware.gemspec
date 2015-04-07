@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.version       = Escher::RackMiddleware::VERSION
   spec.authors       = ['Adam Luzsi']
   spec.email         = ['aluzsi@emarsys.com']
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{Escher authorization for rack based http servers}
+  spec.description   = %q{Escher authorization for rack based http servers with ease in a form of middleware}
   spec.homepage      = 'https://github.com/emartech/escher-rack_middleware-ruby'
   spec.license       = 'MIT'
 
@@ -22,5 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '>= 1.6'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'spec'
+
+  spec.add_dependency 'escher', '>= 0.3.3'
 
 end

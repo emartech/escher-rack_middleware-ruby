@@ -3,7 +3,7 @@ module Escher::RackMiddleware::Logging
   require 'escher/rack_middleware/logging/helper'
 
   def self.extended(klass)
-    klass.__send__(:include,LoggingHelper)
+    klass.__send__(:include,Helper)
   end
 
   def logger=(logger)
