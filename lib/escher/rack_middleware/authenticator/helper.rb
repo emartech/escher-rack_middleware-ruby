@@ -19,12 +19,13 @@ module Escher::RackMiddleware::Authenticator::Helper
         request_env['REQUEST_URI']
     ].join(' => ')
 
-    logger.debug("authorization succeeded!(#{requester_succeed_log_msg})")
+    logger.debug("authentication succeeded!(#{requester_succeed_log_msg})")
 
     true
   rescue Escher::EscherError => ex
 
-    logger.debug("#{ex.message} with #{request_env[EscherEXT::RACK_EMS_AUTH_HEADER]} for #{escher_authenticator}")
+    logger.debug("authentication failed!(#{ex.message})")
+
     false
 
   end
