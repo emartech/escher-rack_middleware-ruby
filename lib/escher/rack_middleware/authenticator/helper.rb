@@ -5,7 +5,7 @@ module Escher::RackMiddleware::Authenticator::Helper
   end
 
   def authorized?(request_env)
-    escher_authenticators.any? { |instance| authorized_with?(instance, request_env) }
+    escher_authenticators.any? { |instance_init| authorized_with?(instance_init.call, request_env) }
   end
 
   def authorized_with?(escher_authenticator, request_env)
