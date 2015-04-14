@@ -22,9 +22,10 @@ module Escher::RackMiddleware::Authenticator::Helper
     logger.debug("authentication succeeded!(#{requester_succeed_log_msg})")
 
     true
+
   rescue Escher::EscherError => ex
 
-    logger.debug("authentication failed!(#{ex.message})")
+    logger.warn("authentication failed!(#{ex.message})")
 
     false
 

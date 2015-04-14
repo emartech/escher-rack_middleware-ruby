@@ -1,2 +1,2 @@
 require 'escher/rack_middleware'
-Escher::RackMiddleware::VERSION = '0.1.3'
+Escher::RackMiddleware::VERSION = '0.1.4'
