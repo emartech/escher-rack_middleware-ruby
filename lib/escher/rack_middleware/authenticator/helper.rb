@@ -11,21 +11,16 @@ module Escher::RackMiddleware::Authenticator::Helper
   def authorized_with?(escher_authenticator, request_env)
 
     request_env['escher.request.api_key_id'] = escher_authenticator.authenticate(
-        Rack::Request.new(request_env),credentials
-    )
+        Rack::Request.new(request_env), credentials)
 
-    requester_succeed_log_msg = [
-        request_env['escher.request.api_key_id'],
-        request_env['REQUEST_URI']
-    ].join(' => ')
-
-    logger.debug("authentication succeeded!(#{requester_succeed_log_msg})")
+    logger.debug(log_message(request_env))
 
     true
 
   rescue Escher::EscherError => ex
 
-    logger.warn("authentication failed!(#{ex.message})")
+    request_env['escher.error'] = ex.message
+    logger.warn(log_message(request_env))
 
     false
 
