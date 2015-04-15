@@ -13,9 +13,9 @@ module Escher::RackMiddleware::Logging::Helper
 
     message = default_log_message(request_env)
 
-    regexp = /^escher/
+    regexp = /^escher\./
     request_env.select { |k, v| k.to_s =~ regexp }.each do |k, v|
-      message[k.to_s.gsub(regexp, '')]= request_env[v]
+      message[k.to_s.gsub(regexp, '')] = v
     end
 
     rack_env = Rack::Request.new(request_env)
@@ -25,7 +25,7 @@ module Escher::RackMiddleware::Logging::Helper
     message['request.endpoint'] = rack_env.path_info
     message['requester.address'] = rack_env.ip
 
-    message['escher.request.status'] = if request_env['escher.error']
+    message['request.authentication'] = if request_env['escher.error']
                                          'failed'
                                        else
                                          'succeeded'

@@ -13,13 +13,14 @@ module Escher::RackMiddleware::Authenticator::Helper
     request_env['escher.request.api_key_id'] = escher_authenticator.authenticate(
         Rack::Request.new(request_env), credentials)
 
+    request_env.delete('escher.error') rescue nil
     logger.debug(log_message(request_env))
 
     true
 
   rescue Escher::EscherError => ex
 
-    request_env['escher.error'] = ex.message
+    request_env['escher.error'] = ex.message || ex.inspect
     logger.warn(log_message(request_env))
 
     false
