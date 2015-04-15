@@ -4,9 +4,15 @@ module Escher::RackMiddleware::Logging::Helper
     self.class.logger
   end
 
+  # default log object to be used if further verbosity required
+  def default_log_message(request_env)
+    {}
+  end
+
   def log_message(request_env)
 
-    message = {}
+    message = default_log_message(request_env)
+
     regexp = /^escher/
     request_env.select { |k, v| k.to_s =~ regexp }.each do |k, v|
       message[k.to_s.gsub(regexp, '')]= request_env[v]
