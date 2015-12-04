@@ -33,8 +33,17 @@ Escher::RackMiddleware.config do |c|
   # this will be triggered every time a request hit your appication
   c.add_credential_updater{ Escher::Keypool.new.get_key_db }
 
+  # autorization defaults to all paths
   # this help you exclude path(s) if you dont want require authorization for every endpoint
   c.add_exclude_path(/^\/*monitoring\//)
+
+  # Alternatively, you can just authorize some paths:
+  # this help you just include certain paths for authorization
+  # c.add_include_path(/^\/*integrations\//)
+
+  # NOTE: You can either use excluded paths or included_paths, using both will throw an
+  #       exception.
+
 
 end
 
