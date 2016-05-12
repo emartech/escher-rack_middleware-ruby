@@ -7,19 +7,22 @@ class Escher::RackMiddleware
   require 'escher/rack_middleware/exclude_path'
   require 'escher/rack_middleware/include_path'
   require 'escher/rack_middleware/authenticator'
+  require 'escher/rack_middleware/default_options'
 
   extend Logging
   extend Credential
   extend ExcludePath
   extend IncludePath
   extend Authenticator
+  include DefaultOptions
 
-  def initialize(app)
+  def initialize(app,options={})
     @app = app
+    @options = default_options.merge(options)
   end
 
   def call(request_env)
-    if authorize_path?(request_env['REQUEST_URI'])
+    if authorize_path?(::Rack::Utils.clean_path_info(request_env[::Rack::PATH_INFO]))
       return unauthorized_response unless authorized?(request_env)
     end
 
@@ -28,15 +31,6 @@ class Escher::RackMiddleware
 
   protected
 
-  def authorize_path?(path)
-    # if no included or excluded paths are defined in config, default to all
-    # routes being authorized
-    return true if excluded_paths.none? && included_paths.none?
-
-    return !excluded_path?(path) if excluded_paths.any?
-    included_path?(path) if included_paths.any?
-  end
-
   def unauthorized_response
     response = Rack::Response.new
     response.write 'Unauthorized'
@@ -44,22 +38,35 @@ class Escher::RackMiddleware
     response.finish
   end
 
-  def env_dump_string(request_env)
-    require 'yaml' unless defined?(YAML)
-    YAML.dump(request_env)
-  end
-
   def self.config(&block)
     block.call(self)
+  end
 
-    # Makes no sense allow include and exclude paths. By default all routes are
-    # authorize and we can define excluded paths, or we allow to either include
-    # the paths we want to check (reverting that logic). Because of this check
-    # if both included and excluded paths were defined in configuration
-    # immediately after config block.
-    if excluded_paths.any? && included_paths.any?
-      fail "Configuration: Excluded and included paths are mutually exclusive."
+  def authorize_path?(path)
+    case true
+
+      when paths_of(:included_paths, include: path)
+        true
+
+      when paths_of(:excluded_paths, include: path)
+        false
+
+      else
+        true
+
     end
   end
+
+  def paths_of(option_key, h)
+    path = h[:include]
+    @options[option_key].any? do |matcher|
+      if matcher.is_a?(Regexp)
+        !!(path =~ matcher)
+      else
+        path == matcher.to_s
+      end
+    end
+  end
+
 
 end

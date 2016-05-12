@@ -1,12 +1,8 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'escher/rack_middleware/version'
-
 Gem::Specification.new do |spec|
 
   spec.name          = 'escher-rack_middleware'
-  spec.version       = Escher::RackMiddleware::VERSION
+  spec.version       = File.read(File.join(File.dirname(__FILE__),'VERSION'))
   spec.authors       = ['Adam Luzsi']
   spec.email         = ['aluzsi@emarsys.com']
   spec.summary       = %q{Escher authorization for rack based http servers}
@@ -23,6 +19,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'spec'
 
+  spec.add_dependency 'rack'
   spec.add_dependency 'escher', '>= 0.3.3'
 
 end
