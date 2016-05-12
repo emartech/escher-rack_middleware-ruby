@@ -2,12 +2,16 @@ module Escher::RackMiddleware::DefaultOptions
 
   protected
 
-  def default_options
-    Escher::RackMiddleware.instance_variables.reduce({}) do |options, name|
-      options[name.to_s.sub(/^@/, '').to_sym]= Escher::RackMiddleware.instance_variable_get(name)
 
-      options
-    end
+
+  def default_options
+    {
+        :logger => Escher::RackMiddleware.logger,
+        :excluded_paths => Escher::RackMiddleware.excluded_paths,
+        :included_paths => Escher::RackMiddleware.included_paths,
+        :escher_authenticators => Escher::RackMiddleware.escher_authenticators,
+        :credentials => Escher::RackMiddleware.credentials
+    }
   end
 
 end
