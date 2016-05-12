@@ -2,8 +2,6 @@ module Escher::RackMiddleware::DefaultOptions
 
   protected
 
-
-
   def default_options
     {
         :logger => Escher::RackMiddleware.logger,
