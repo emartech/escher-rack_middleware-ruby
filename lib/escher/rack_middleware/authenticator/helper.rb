@@ -5,6 +5,7 @@ module Escher::RackMiddleware::Authenticator::Helper
   end
 
   def authorized?(request_env)
+    logger.warn('No Escher authenticator was found. Check your config!') if escher_authenticators.empty?
     escher_authenticators.any? { |instance_init| authorized_with?(instance_init.call, request_env) }
   end
 
