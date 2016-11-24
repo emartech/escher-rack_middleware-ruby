@@ -26,6 +26,11 @@ module Escher::RackMiddleware::Authenticator::Helper
 
     false
 
+  rescue => ex
+    # escher fails, bad implementations
+    logger.warn(ex)
+
+    false
   end
 
 end
