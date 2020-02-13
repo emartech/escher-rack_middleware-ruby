@@ -1,6 +1,6 @@
 require 'escher'
-class Escher::RackMiddleware
 
+class Escher::RackMiddleware
   require 'escher/rack_middleware/version'
   require 'escher/rack_middleware/logging'
   require 'escher/rack_middleware/credential'
@@ -16,9 +16,9 @@ class Escher::RackMiddleware
   extend Authenticator
   include DefaultOptions
 
-  def initialize(app,options={})
+  def initialize(app, options = {})
     @app = app
-    @options = default_options.merge(options)
+    @options = options
   end
 
   def call(request_env)
@@ -45,21 +45,21 @@ class Escher::RackMiddleware
   def authorize_path?(path)
     case true
 
-      when paths_of(:included_paths, include: path)
-        true
+    when paths_of(:included_paths, include: path)
+      true
 
-      when paths_of(:excluded_paths, include: path)
-        false
+    when paths_of(:excluded_paths, include: path)
+      false
 
-      else
-        true
+    else
+      true
 
     end
   end
 
   def paths_of(option_key, h)
     path = h[:include]
-    @options[option_key].any? do |matcher|
+    final_options[option_key].any? do |matcher|
       if matcher.is_a?(Regexp)
         !!(path =~ matcher)
       else
@@ -68,5 +68,7 @@ class Escher::RackMiddleware
     end
   end
 
-
+  def final_options
+    @final_options ||= default_options.merge(@options)
+  end
 end
